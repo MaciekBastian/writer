@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<character>
+    <id>2e07abfda7914840bef93910e19cb59e</id>
+    <name>Sarah Woods</name>
+    <age>20</age>
+    <gender>female</gender>
+    <status>alive</status>
+    <occupation-history>
+        <occupation>
+            <id>7ee9088e7e1e4dd48999af749e3ec316</id>
+            <occupation>Student of New Hope HS</occupation>
+            <start>--before</start>
+            <end></end>
+        </occupation>
+        <occupation>
+            <id>d98b98aa02934e90bb5f3b3f355a8027</id>
+            <occupation>Barist at Starbucks</occupation>
+            <start>Part 1: Chapter 4</start>
+            <end>Part 1: Chapter 8</end>
+        </occupation>
+    </occupation-history>
+    <first-apperance>Part 1: Chapter 1</first-apperance>
+    <last-apperance>Part 1: Chapter 10</last-apperance>
+    <portrayed-by></portrayed-by>
+    <aliases>
+        <nickname>Woods</nickname>
+        <nickname>new one</nickname>
+    </aliases>
+    <family-members>
+        <person>
+            <id>64ae76a97149499da874d11c85f96616</id>
+            <name>Joel Woods</name>
+            <kinship>father</kinship>
+        </person>
+        <person>
+            <id>8a77e5fb3e994f52866dfbffb1dc9e57</id>
+            <name>Marie Woods</name>
+            <kinship>mother</kinship>
+        </person>
+    </family-members>
+    <firends>
+        <person>
+            <id>b7cf763c99ac48f3953f04d5e8a5f078</id>
+            <name>Leon Higgs</name>
+            <side-change></side-change>
+        </person>
+        <person>
+            <id>1f78ca2e258049d3b5c56f848caf0bc0</id>
+            <name>Jeffry Morse</name>
+            <side-change>fromEnemy</side-change>
+        </person>
+        <person>
+            <id>3284f0a3e546486ea9cbbd8f86a905b9</id>
+            <name>Ola Reynolds</name>
+            <side-change>toEnemy</side-change>
+        </person>
+    </firends>
+    <enemies>
+        <person>
+            <id>1f78ca2e258049d3b5c56f848caf0bc0</id>
+            <name>Jeffry Morse</name>
+            <side-change>fromEnemy</side-change>
+        </person>
+        <person>
+            <id>3284f0a3e546486ea9cbbd8f86a905b9</id>
+            <name>Ola Reynolds</name>
+            <side-change>toEnemy</side-change>
+        </person>
+    </enemies>
+    <relationships>
+        <relationship>
+            <person-id>3284f0a3e546486ea9cbbd8f86a905b9</person-id>
+            <name>Ola Reynolds</name>
+            <decription>
+                <![CDATA[ 
+                <p>
+                    Short description of those two characters <u>relationship</u>
+                </p>
+                ]]>
+            </decription>
+        </relationship>
+    </relationships>
+    <story-plan>
+        <plan-entry>
+            <moment>Part 1: Chapter 1</moment>
+            <content>She starts a job at Starbucks</content>
+        </plan-entry>
+    </story-plan>
+    <notes>
+        <note>
+            <![CDATA[ 
+            <p>
+                This character is not a villan.
+            </p>
+            ]]>
+        </note>
+    </notes>
+    <description>
+        <![CDATA[ 
+        <p>
+            Character description
+        </p>
+        ]]>
+    </description>
+    <apperance>
+        <![CDATA[ 
+        <p>
+            Character's apperance description
+        </p>
+        ]]>
+    </apperance>
+    <goals>
+        <![CDATA[ 
+        <p>
+            Character's goals description
+        </p>
+        ]]>
+    </goals>
+</character>

@@ -1,0 +1,27 @@
+- root
+  - .writer
+    - preferences.json
+    - versions
+      - {version_id}.xml
+      - ...
+      - {version_id}.xml
+  - characters
+    - all_characters.json
+    - {character_id}.xml
+    - ...
+    - {character_id}.xml
+  - threads
+    - all_threads.json
+    - {thread_id}.xml
+    - ...
+    - {thread_id}.xml
+  - chapters
+    - all_chapters.json
+    - {chapter_id}.xml
+    - ...
+    - {chapter_id}.xml
+  - content
+    - {chapter_id}.txt
+    - ...
+    - {chapter_id}.txt
+  - config.mwrt (json)

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter>
+    <name>Chapter 1</name>
+    <index>0</index>
+    <narration>
+        <id>2309ur034rxm3ucr03ur234</id>
+        <name>Brian</name>
+    </narration>
+    <description></description>
+    <starts-new-part>true</starts-new-part>
+    <scenes>
+        <scene>
+            <id>1575rh19cha910a0a52a7b019294256a</id>
+            <name>Chapter 1: Scene 1</name>
+            <index>0</index>
+            <time></time>
+            <description></description>
+            <threads>
+                <id>1575064a03eb4ca0a52a7b019294256a</id>
+                <id>b60667b21c064dfa81c45907f5a3bc23</id>
+            </threads>
+        </scene>
+    </scenes>
+</chapter>
