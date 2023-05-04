@@ -8,15 +8,12 @@ import 'dropdown_select.dart';
 import 'sidebar/project_search.dart';
 
 import '../helpers/general_helper.dart';
-import '../models/chapters/chapter.dart';
 import '../models/sidebar_tab.dart';
 import '../models/settings_enums.dart';
 import '../providers/project_state.dart';
 import 'checkbox.dart';
-import 'dropdown_menu.dart';
 import 'sidebar/project_tab.dart';
 import 'sidebar/resources_tab.dart';
-import 'sidebar/sidebar_files.dart';
 import 'sidebar/version_control_tab.dart';
 import 'tooltip.dart';
 
@@ -78,9 +75,6 @@ class _SidebarState extends State<Sidebar> {
                   ),
                 ),
               ),
-              Row(
-                children: [],
-              ),
             ],
           ),
         ),
@@ -115,9 +109,6 @@ class _SidebarState extends State<Sidebar> {
                     color: Colors.grey[400],
                   ),
                 ),
-              ),
-              Row(
-                children: [],
               ),
             ],
           ),
@@ -197,7 +188,7 @@ class _SidebarState extends State<Sidebar> {
                     provider.toggleSmallScreenView();
                   },
                 ),
-                // MACOS SPECIFIC
+                // TODO: MACOS SPECIFIC
                 if (Platform.isMacOS)
                   Column(
                     children: [],

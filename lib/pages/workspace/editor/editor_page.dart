@@ -2,10 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_improved_scrolling/flutter_improved_scrolling.dart';
 import 'package:provider/provider.dart';
-import 'package:writer/pages/workspace/editor/editor_scene.dart';
-import 'package:writer/widgets/dropdown_select.dart';
+import 'editor_scene.dart';
+import '../../../widgets/dropdown_select.dart';
 
-import '../../../models/chapters/chapter_file.dart';
 import '../../../providers/project_state.dart';
 
 class EditorPage extends StatefulWidget {
@@ -141,7 +140,7 @@ class _EditorPageState extends State<EditorPage> {
         Expanded(
           child: Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: SceneEditor(),
               ),
               if (!provider.smallScreenView && !provider.showRightSidebar)

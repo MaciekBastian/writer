@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   pasteboard
   printing
   screen_retriever
+  share_plus
   simple_audio
   url_launcher_windows
   window_manager

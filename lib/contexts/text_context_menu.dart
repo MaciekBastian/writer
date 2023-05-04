@@ -40,12 +40,20 @@ class TextContextMenu extends StatelessWidget {
         fitsBelow: fitsBelow,
       ),
       child: Container(
-        width: 200.0,
+        width: 250.0,
         height: height,
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: theme.colorScheme.surface,
+          color: const Color(0xFF242424),
           border: Border.all(color: theme.canvasColor, width: 2.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 15.0,
+              spreadRadius: 10.0,
+            )
+          ],
         ),
         child: Column(
           children: [
@@ -151,7 +159,7 @@ class TextContextMenu extends StatelessWidget {
               ),
             ),
             const Divider(
-              color: Color(0xFF212121),
+              color: Color(0xFF424242),
               height: 10.0,
               thickness: 2.0,
               indent: 5.0,

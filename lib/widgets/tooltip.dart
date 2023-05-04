@@ -81,13 +81,24 @@ class _WrtTooltipState extends State<WrtTooltip> {
     var size = renderBox.size;
     var offset = renderBox.localToGlobal(Offset.zero);
 
+    final text = TextPainter(
+      text: TextSpan(
+        text: widget.content,
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    text.layout(maxWidth: 150.0);
+
     return OverlayEntry(
       maintainState: true,
       builder: (context) => Positioned(
         left: widget.showOnTheBottom
-            ? offset.dx
+            ? widget.showOnTheLeft
+                ? offset.dx - text.size.width
+                : offset.dx
             : widget.showOnTheLeft
-                ? offset.dx - (widget.content.length * 6.5) - size.width
+                ? offset.dx - text.size.width - size.width
                 : offset.dx + size.width + 10.0,
         top: widget.showOnTheBottom
             ? offset.dy + size.height + 5.0

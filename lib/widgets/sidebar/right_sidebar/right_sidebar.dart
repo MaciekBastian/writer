@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/system_pages.dart';
+import '../../../helpers/general_helper.dart';
 import '../../../models/file_tab.dart';
 import '../../../models/sidebar_tab.dart';
-import '../../../pages/resources/user_file.dart';
 import '../../../pages/tools/calendar.dart';
 import '../../../pages/tools/dictionary.dart';
 import '../../../pages/tools/spell_check.dart';
-import '../../../pages/workspace/empty.dart';
 import '../../../pages/workspace/plot_development.dart';
 import '../../../providers/project_state.dart';
 import '../../dropdown_menu.dart';
@@ -182,13 +181,13 @@ class _RightSidebarState extends State<RightSidebar> {
               SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: _buildWorkspace(_openedTab),
+                child: _buildSnippet(_openedTab),
               )
             else
               SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: _buildWorkspace(null),
+                child: _buildSnippet(null),
               ),
             Container(
               height: 30.0,
@@ -370,18 +369,49 @@ class _RightSidebarState extends State<RightSidebar> {
     }
   }
 
-  Widget _buildWorkspace(FileTab? tab) {
+  Widget _buildSnippet(FileTab? tab) {
     final fileType = tab?.type;
     final path = tab?.path;
     final id = tab?.id;
     final provider = Provider.of<ProjectState>(context);
 
-    final empty = Center(
-      child: Icon(
-        Icons.text_snippet_outlined,
-        color: Colors.grey[900],
-        size: 180.0,
-      ),
+    final empty = DragTarget<FileTab>(
+      onWillAccept: (data) => data?.id != null,
+      onAccept: (data) {
+        setState(() {
+          _openedTab = data;
+        });
+      },
+      builder: (context, candidateData, rejectedData) {
+        if (candidateData.isNotEmpty) {
+          final candidate = candidateData.first;
+          if (candidate != null) {
+            return Center(
+              child: Icon(
+                GeneralHelper().getTypeIcon(candidate.type).icon,
+                color: Colors.grey[900],
+                size: 180.0,
+              ),
+            );
+          }
+        }
+        if (rejectedData.isNotEmpty) {
+          return Center(
+            child: Icon(
+              Icons.block,
+              color: Colors.grey[900],
+              size: 180.0,
+            ),
+          );
+        }
+        return Center(
+          child: Icon(
+            Icons.text_snippet_outlined,
+            color: Colors.grey[900],
+            size: 180.0,
+          ),
+        );
+      },
     );
 
     switch (fileType) {
@@ -408,7 +438,7 @@ class _RightSidebarState extends State<RightSidebar> {
       case null:
         return empty;
       case FileType.userFile:
-        return const UserFilePage();
+        return empty;
     }
 
     return systemPages[path] ?? empty;

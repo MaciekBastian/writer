@@ -118,82 +118,129 @@ class __ButtonTileState extends State<_ButtonTile> {
 
     return Container(
       color: isSelected ? Colors.grey[800] : Colors.transparent,
-      child: Material(
-        color: Colors.transparent,
-        child: ContextMenuRegion(
-          contextMenu: tab.type == FileType.characterEditor && tab.id != null
-              ? CharacterFileContextMenu(
-                  id: tab.id!,
-                )
-              : tab.type == FileType.threadEditor && tab.id != null
-                  ? ThreadFileContextMenu(
-                      id: tab.id!,
-                    )
-                  : const GenericContextMenu(buttonConfigs: []),
-          child: InkWell(
-            onTap: () {
-              if (tab.id != null) {
-                if (provider.selectedTab?.id == tab.id) return;
-                if (tab.type == FileType.characterEditor) {
-                  provider.openCharacter(tab.id!);
-                } else if (tab.type == FileType.threadEditor) {
-                  provider.openThread(tab.id!);
-                } else if (tab.type == FileType.editor) {
-                  provider.openChapterEditor(tab.id!);
-                }
-              } else {
-                _onTabSelected(tab);
-              }
-            },
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            hoverColor: Colors.grey[800],
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 6.0,
-                    horizontal: 20.0,
+      child: Draggable<FileTab>(
+        feedback: Container(
+          height: 35.0,
+          width: 180.0,
+          color: const Color(0xFF121212),
+          padding: const EdgeInsets.symmetric(
+            vertical: 6.0,
+            horizontal: 20.0,
+          ),
+          child: Row(
+            children: [
+              Icon(
+                GeneralHelper().getTypeIcon(tab.type, tab.path).icon,
+                color: Colors.white,
+                size: 20.0,
+              ),
+              const SizedBox(width: 10.0),
+              Flexible(
+                child: Text(
+                  label ??
+                      GeneralHelper()
+                          .getFileName(
+                            tab.type,
+                            tab.path,
+                          )
+                          .tr(),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: containsErrors ? Colors.red : null,
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        GeneralHelper().getTypeIcon(tab.type, tab.path).icon,
-                        color: Colors.white,
-                        size: 20.0,
-                      ),
-                      const SizedBox(width: 10.0),
-                      Flexible(
-                        child: Text(
-                          label ??
-                              GeneralHelper()
-                                  .getFileName(
-                                    tab.type,
-                                    tab.path,
-                                  )
-                                  .tr(),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: containsErrors ? Colors.red : null,
-                          ),
-                          maxLines: 1,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                if (containsErrors && tab.id != null)
-                  const Positioned(
-                    right: 10.0,
-                    top: 5.0,
-                    child: Icon(
-                      Icons.error_outline,
-                      size: 20.0,
-                      color: Colors.red,
+              ),
+            ],
+          ),
+        ),
+        data: tab.id == null
+            ? [
+                FileType.characterEditor,
+                FileType.threadEditor,
+                FileType.editor,
+              ].contains(tab.type)
+                ? null
+                : tab
+            : tab,
+        child: Material(
+          color: Colors.transparent,
+          child: ContextMenuRegion(
+            contextMenu: tab.type == FileType.characterEditor && tab.id != null
+                ? CharacterFileContextMenu(
+                    id: tab.id!,
+                  )
+                : tab.type == FileType.threadEditor && tab.id != null
+                    ? ThreadFileContextMenu(
+                        id: tab.id!,
+                      )
+                    : const GenericContextMenu(buttonConfigs: []),
+            child: InkWell(
+              onTap: () {
+                if (tab.id != null) {
+                  if (provider.selectedTab?.id == tab.id) return;
+                  if (tab.type == FileType.characterEditor) {
+                    provider.openCharacter(tab.id!);
+                  } else if (tab.type == FileType.threadEditor) {
+                    provider.openThread(tab.id!);
+                  } else if (tab.type == FileType.editor) {
+                    provider.openChapterEditor(tab.id!);
+                  }
+                } else {
+                  _onTabSelected(tab);
+                }
+              },
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              hoverColor: Colors.grey[800],
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 6.0,
+                      horizontal: 20.0,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          GeneralHelper().getTypeIcon(tab.type, tab.path).icon,
+                          color: Colors.white,
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 10.0),
+                        Flexible(
+                          child: Text(
+                            label ??
+                                GeneralHelper()
+                                    .getFileName(
+                                      tab.type,
+                                      tab.path,
+                                    )
+                                    .tr(),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: containsErrors ? Colors.red : null,
+                            ),
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-              ],
+                  if (containsErrors && tab.id != null)
+                    const Positioned(
+                      right: 10.0,
+                      top: 5.0,
+                      child: Icon(
+                        Icons.error_outline,
+                        size: 20.0,
+                        color: Colors.red,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
@@ -267,7 +314,9 @@ class __ButtonTileState extends State<_ButtonTile> {
                         child: InkWell(
                           onTap: () {
                             if (widget.tab.type == FileType.characterEditor) {
-                              provider.addCharacter();
+                              provider.addCharacter(
+                                'character.new_character'.tr(),
+                              );
                             }
                           },
                           borderRadius: BorderRadius.circular(10.0),
@@ -292,7 +341,7 @@ class __ButtonTileState extends State<_ButtonTile> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            provider.addThread();
+                            provider.addThread('thread.new_thread'.tr());
                           },
                           borderRadius: BorderRadius.circular(10.0),
                           highlightColor: Colors.transparent,

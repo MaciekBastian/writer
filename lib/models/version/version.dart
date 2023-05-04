@@ -60,7 +60,7 @@ class VersionFile extends Version {
   List<Character> characters;
   List<Thread> threads;
   List<Chapter> chapters;
-  List<List<String>> contents;
+  Map<String, List<String>> contents;
   Project config;
 
   VersionFile({
@@ -75,7 +75,7 @@ class VersionFile extends Version {
     this.characters = const [],
     this.threads = const [],
     this.chapters = const [],
-    this.contents = const [],
+    this.contents = const {},
   }) : super(
           code: code,
           commited: commited,

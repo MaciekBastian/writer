@@ -8,7 +8,6 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:provider/provider.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:tuple/tuple.dart';
-import 'package:writer/contexts/text_context_menu.dart';
 
 import '../../../helpers/general_helper.dart';
 import '../../../models/chapters/chapter_file.dart';
@@ -156,7 +155,7 @@ class _SceneEditorState extends State<SceneEditor> {
           child: Container(
             width: maxWidth,
             height: quickSuggestions.length * 18.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.grey,
               boxShadow: [
                 BoxShadow(

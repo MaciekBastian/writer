@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
 
-import 'package:flutter/material.dart' as material;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:path/path.dart' as p;
 import 'package:pdf/pdf.dart';
@@ -23,7 +22,7 @@ class ReportHelper {
     final reports = Directory(p.join(dir.path, 'reports.reports'.tr()));
     if (!(reports.existsSync())) await reports.create();
     final now = DateTime.now();
-    final fileName = 'character_test';
+    const fileName = 'character_test';
     // '${'characters'.tr()}_${now.year}${now.month < 10 ? '0' : ''}${now.month}${now.day < 10 ? '0' : ''}${now.day}_${now.hour < 10 ? '0' : ''}${now.hour}${now.minute < 10 ? '0' : ''}${now.minute}${now.second < 10 ? '0' : ''}${now.second}';
     final file = File(p.join(reports.path, '$fileName.pdf'));
 
@@ -693,6 +692,24 @@ class ReportHelper {
 
     // save file
     await file.writeAsBytes(await pdf.save());
+  }
+
+  Future<void> getFamilyTreeForCharacter(Project project, String id) async {
+    final getCharactersPort = ReceivePort();
+    await Isolate.spawn(_getAllCharacters, [
+      getCharactersPort.sendPort,
+      project.path,
+    ]);
+    final getCharactersResp = await getCharactersPort.first as List<String>?;
+    final characters = (getCharactersResp ?? []).map(
+      (e) {
+        return Character.fromXml(Character.getCharacterTag(e));
+      },
+    ).toList();
+
+    final character = characters.firstWhere((element) => element.id == id);
+
+    for (var familyMember in character.familyMembers) {}
   }
 }
 

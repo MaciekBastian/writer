@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HowToUseWriter extends StatelessWidget {
+  static const pageName = '/about';
   const HowToUseWriter({super.key});
 
   @override

@@ -6,7 +6,6 @@ import '../../constants/colors.dart';
 
 import '../../models/chapters/chapter.dart';
 import '../../models/chapters/scene.dart';
-import '../../models/threads/thread.dart';
 import '../../providers/project_state.dart';
 import '../../widgets/hover_box.dart';
 import '../../widgets/snippets/thread_snippet.dart';

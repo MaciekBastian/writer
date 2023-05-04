@@ -112,4 +112,15 @@ class FileExplorerHelper {
 
     return children.map((e) => e.path).toList();
   }
+
+  Future<String> macosGetProjectPath(String name) async {
+    final directory = await pp.getApplicationDocumentsDirectory();
+    return p.join(directory.path, macosGetProjectPathName(name));
+  }
+
+  Future<void> saveFile(String content, String path) async {
+    final file = File(path);
+    await file.create();
+    await file.writeAsString(content);
+  }
 }

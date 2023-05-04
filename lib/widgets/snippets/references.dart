@@ -1,13 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:writer/models/search_result.dart';
-import 'package:writer/widgets/expandable_section.dart';
+import '../../models/search_result.dart';
+import '../expandable_section.dart';
 
 import '../../helpers/project_helper.dart';
 import '../../models/file_tab.dart';
 import '../../providers/project_state.dart';
-import '../button.dart';
 
 class ReferencesToFile extends StatefulWidget {
   const ReferencesToFile({super.key, required this.id});

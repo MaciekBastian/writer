@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:path/path.dart' as p;
-import '../models/file_tab.dart';
 import 'package:xml/xml.dart';
 
+import '../models/file_tab.dart';
 import '../models/search_result.dart';
 
 class SearchHelper {

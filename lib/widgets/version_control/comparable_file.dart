@@ -1,12 +1,9 @@
-import 'dart:ui' as ui;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../models/characters/affiliated_person.dart';
 import '../../models/file_tab.dart';
 
 import '../../contexts/text_context_menu.dart';
-import '../../helpers/general_helper.dart';
 import '../../models/characters/character.dart';
 import '../../models/version/version.dart';
 

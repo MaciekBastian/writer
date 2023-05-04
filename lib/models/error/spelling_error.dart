@@ -1,5 +1,3 @@
-import '../file_tab.dart';
-
 class SpellingError {
   final String wordWithError;
   final List<String> suggestions;

@@ -44,6 +44,7 @@ class _ChapterTileEditorState extends State<ChapterTileEditor> {
         setState(() {
           _hasFocus = false;
           _overlayEntry?.remove();
+          _overlayEntry = null;
         });
       }
     });

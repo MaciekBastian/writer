@@ -45,6 +45,7 @@ class _WtrMenuButtonState extends State<WtrMenuButton> {
         Overlay.of(context).insert(_overlayEntry!);
       } else {
         _overlayEntry!.remove();
+        _overlayEntry = null;
       }
     });
   }

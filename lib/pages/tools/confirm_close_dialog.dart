@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -18,33 +20,34 @@ class ConfirmCloseDialog extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text(
-                    'close_dialog.confirm_closing'.tr(),
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.canvasColor,
+            if (!Platform.isMacOS)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      'close_dialog.confirm_closing'.tr(),
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: theme.canvasColor,
+                      ),
                     ),
                   ),
-                ),
-                CloseWindowButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  colors: WindowButtonColors(
-                    iconNormal: Colors.grey[800],
-                    iconMouseDown: Colors.white,
-                    iconMouseOver: Colors.white,
-                    mouseOver: Colors.red,
-                    mouseDown: Colors.red[200],
-                    normal: Colors.transparent,
+                  CloseWindowButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    colors: WindowButtonColors(
+                      iconNormal: Colors.grey[800],
+                      iconMouseDown: Colors.white,
+                      iconMouseOver: Colors.white,
+                      mouseOver: Colors.red,
+                      mouseDown: Colors.red[200],
+                      normal: Colors.transparent,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

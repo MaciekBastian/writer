@@ -4,12 +4,8 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 import '../../constants/commands.dart';
-import '../../helpers/general_helper.dart';
-import '../../models/chapters/chapter.dart';
-import '../../providers/project_state.dart';
 
 class NewFilePrompt extends StatefulWidget {
   const NewFilePrompt({super.key});

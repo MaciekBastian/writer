@@ -10,9 +10,11 @@ import '../pages/tools/dictionary.dart';
 import '../pages/tools/file_explorer.dart';
 import '../pages/tools/wikipedia.dart';
 import '../pages/version_control/compare_page.dart';
+import '../widgets/prompts/command_palette.dart';
+import '../widgets/prompts/tab_switcher_dialog.dart';
 
 const Map<String, Widget> systemPages = {
-  '/writer-help': HowToUseWriter(),
+  HowToUseWriter.pageName: HowToUseWriter(),
   '/tools/dictionary': DictionaryPage(),
   '/tools/calendar': CalendarPage(),
   '/about/licenses': LicensesPage(),
@@ -31,7 +33,7 @@ const Map<SidebarProjectTabElement, String> systemPagesPathsForSidebar = {
 };
 
 const Map<String, Icon> systemPagesIcons = {
-  '/writer-help': Icon(Icons.help_outline),
+  HowToUseWriter.pageName: Icon(Icons.help_outline),
   '/tools/dictionary': Icon(Icons.text_fields),
   '/tools/calendar': Icon(Icons.calendar_month_outlined),
   '/about/licenses': Icon(Icons.notes),
@@ -50,7 +52,7 @@ const Map<String, Icon> systemPagesIcons = {
 };
 
 const Map<String, String> systemPagesNames = {
-  '/writer-help': 'system_pages.how_to_use_writer',
+  HowToUseWriter.pageName: 'system_pages.how_to_use_writer',
   '/tools/dictionary': 'system_pages.dictionary',
   '/tools/calendar': 'system_pages.calendar',
   '/about/licenses': 'taskbar.licenses',
@@ -62,7 +64,7 @@ const Map<String, String> systemPagesNames = {
 };
 
 const Map<String, Widget> resources = {
-  '/writer-help': HowToUseWriter(),
+  HowToUseWriter.pageName: HowToUseWriter(),
 };
 
 const Map<String, Widget> visualizationsAndReports = {
@@ -75,3 +77,8 @@ const Map<String, Widget> tools = {
   '/tools/file_explorer': FileExplorerPage(),
   '/tools/wikipedia': WikipediaPage(),
 };
+
+const List<String> dialogs = [
+  TabSwitcherDialog.pageName,
+  CommandPalette.pageName,
+];

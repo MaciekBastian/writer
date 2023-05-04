@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/sidebar_tab.dart';
 
 import '../providers/project_state.dart';
+import '../providers/selection.dart';
 import '../providers/version_control.dart';
 
 class Statusbar extends StatelessWidget {
@@ -66,21 +67,25 @@ class Statusbar extends StatelessWidget {
             children: [
               if (provider.statusBarWordCount &&
                   provider.wordCountForEditor() != null)
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {},
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.white24,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                      child: Text(
-                        '${'status_bar.words'.tr()}: ${provider.wordCountForEditor()}',
-                        style: theme.textTheme.labelMedium,
+                Consumer<SelectionManager>(
+                  builder: (context, manager, child) {
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {},
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        hoverColor: Colors.white24,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                          child: Text(
+                            '${'status_bar.words'.tr()}: ${manager.isClear ? '' : '${manager.selectedWords} ${'status_bar.of'.tr()} '}${provider.wordCountForEditor()}',
+                            style: theme.textTheme.labelMedium,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               // TODO: maybe (?) notifications
 
@@ -113,6 +118,21 @@ class Statusbar extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+              if (provider.isExporting)
+                Row(
+                  children: [
+                    const SizedBox(width: 10.0),
+                    const Icon(
+                      Icons.download,
+                      size: 15.0,
+                    ),
+                    const SizedBox(width: 3.0),
+                    Text(
+                      '${'exporting.exporting'.tr()}...',
+                      style: theme.textTheme.labelMedium,
+                    ),
+                  ],
                 ),
               const SizedBox(width: 10.0),
             ],

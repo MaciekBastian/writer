@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../helpers/window_helper.dart';
 
 import '../pages/tools/confirm_delete_dialog.dart';
 import '../providers/project_state.dart';
@@ -23,11 +22,19 @@ class CharacterFileContextMenu extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      width: 200.0,
+      width: 250.0,
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: theme.colorScheme.surface,
+        color: const Color(0xFF242424),
         border: Border.all(color: theme.canvasColor, width: 2.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 15.0,
+            spreadRadius: 10.0,
+          )
+        ],
       ),
       child: Column(
         children: [
@@ -58,7 +65,7 @@ class CharacterFileContextMenu extends StatelessWidget {
             },
           ),
           const Divider(
-            color: Color(0xFF212121),
+            color: Color(0xFF424242),
             height: 10.0,
             thickness: 2.0,
             indent: 5.0,
@@ -231,11 +238,19 @@ class ThreadFileContextMenu extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      width: 200.0,
+      width: 250.0,
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: theme.colorScheme.surface,
+        color: const Color(0xFF242424),
         border: Border.all(color: theme.canvasColor, width: 2.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 15.0,
+            spreadRadius: 10.0,
+          )
+        ],
       ),
       child: Column(
         children: [
@@ -259,7 +274,7 @@ class ThreadFileContextMenu extends StatelessWidget {
             },
           ),
           const Divider(
-            color: Color(0xFF212121),
+            color: Color(0xFF424242),
             height: 10.0,
             thickness: 2.0,
             indent: 5.0,

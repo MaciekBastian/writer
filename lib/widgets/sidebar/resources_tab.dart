@@ -30,9 +30,6 @@ class ResourcesTab extends StatelessWidget {
                   ),
                 ),
               ),
-              Row(
-                children: [],
-              ),
             ],
           ),
         ),
@@ -89,24 +86,63 @@ class ResourcesTab extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Container(
-                      color: isSelected ? Colors.grey[800] : Colors.transparent,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 15.0,
+                    child: Draggable<FileTab>(
+                      data: FileTab(
+                        id: null,
+                        path: e,
+                        type: FileType.system,
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            systemPagesIcons[e]?.icon ?? Icons.note_outlined,
-                            size: 20.0,
-                          ),
-                          const SizedBox(width: 10.0),
-                          Text(
-                            (systemPagesNames[e] ?? 'system_pages.new_tab')
-                                .tr(),
-                          ),
-                        ],
+                      feedback: Container(
+                        height: 35.0,
+                        width: 180.0,
+                        color: const Color(0xFF121212),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 6.0,
+                          horizontal: 20.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              systemPagesIcons[e]?.icon ?? Icons.note_outlined,
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 10.0),
+                            Flexible(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  (systemPagesNames[e] ??
+                                          'system_pages.new_tab')
+                                      .tr(),
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Container(
+                        color:
+                            isSelected ? Colors.grey[800] : Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              systemPagesIcons[e]?.icon ?? Icons.note_outlined,
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 10.0),
+                            Text(
+                              (systemPagesNames[e] ?? 'system_pages.new_tab')
+                                  .tr(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -158,24 +194,63 @@ class ResourcesTab extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Container(
-                      color: isSelected ? Colors.grey[800] : Colors.transparent,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 15.0,
+                    child: Draggable<FileTab>(
+                      data: FileTab(
+                        id: null,
+                        path: e,
+                        type: FileType.system,
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            systemPagesIcons[e]?.icon ?? Icons.note_outlined,
-                            size: 20.0,
-                          ),
-                          const SizedBox(width: 10.0),
-                          Text(
-                            (systemPagesNames[e] ?? 'system_pages.new_tab')
-                                .tr(),
-                          ),
-                        ],
+                      feedback: Container(
+                        height: 35.0,
+                        width: 180.0,
+                        color: const Color(0xFF121212),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 6.0,
+                          horizontal: 20.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              systemPagesIcons[e]?.icon ?? Icons.note_outlined,
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 10.0),
+                            Flexible(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  (systemPagesNames[e] ??
+                                          'system_pages.new_tab')
+                                      .tr(),
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Container(
+                        color:
+                            isSelected ? Colors.grey[800] : Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              systemPagesIcons[e]?.icon ?? Icons.note_outlined,
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 10.0),
+                            Text(
+                              (systemPagesNames[e] ?? 'system_pages.new_tab')
+                                  .tr(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -227,24 +302,63 @@ class ResourcesTab extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Container(
-                      color: isSelected ? Colors.grey[800] : Colors.transparent,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 15.0,
+                    child: Draggable<FileTab>(
+                      data: FileTab(
+                        id: null,
+                        path: e,
+                        type: FileType.system,
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            systemPagesIcons[e]?.icon ?? Icons.note_outlined,
-                            size: 20.0,
-                          ),
-                          const SizedBox(width: 10.0),
-                          Text(
-                            (systemPagesNames[e] ?? 'system_pages.new_tab')
-                                .tr(),
-                          ),
-                        ],
+                      feedback: Container(
+                        height: 35.0,
+                        width: 180.0,
+                        color: const Color(0xFF121212),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 6.0,
+                          horizontal: 20.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              systemPagesIcons[e]?.icon ?? Icons.note_outlined,
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 10.0),
+                            Flexible(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  (systemPagesNames[e] ??
+                                          'system_pages.new_tab')
+                                      .tr(),
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Container(
+                        color:
+                            isSelected ? Colors.grey[800] : Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              systemPagesIcons[e]?.icon ?? Icons.note_outlined,
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 10.0),
+                            Text(
+                              (systemPagesNames[e] ?? 'system_pages.new_tab')
+                                  .tr(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

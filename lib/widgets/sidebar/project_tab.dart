@@ -88,7 +88,9 @@ class _SidebarProjectTabState extends State<SidebarProjectTab> {
                         label: 'taskbar.create_character'.tr(),
                         callback: () {
                           if (provider.isProjectOpened) {
-                            provider.addCharacter();
+                            provider.addCharacter(
+                              'character.new_character'.tr(),
+                            );
                           }
                         },
                       ),
@@ -96,7 +98,7 @@ class _SidebarProjectTabState extends State<SidebarProjectTab> {
                         label: 'taskbar.create_thread'.tr(),
                         callback: () {
                           if (provider.isProjectOpened) {
-                            provider.addThread();
+                            provider.addThread('thread.new_thread'.tr());
                           }
                         },
                       ),

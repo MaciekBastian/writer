@@ -13,7 +13,9 @@
     "start_your_work": "Rozpocznij pracę",
     "first_launch": "Pierwsze uruchomienie? Naucz się jak korzystać z Plotweaver!",
     "project_name": "Podaj unikatową nazwę dla swojego projektu",
-    "select_project": "Wybierz projekt z listy poniżej:"
+    "select_project": "Wybierz projekt z listy poniżej:",
+    "last_modified": "Last modified",
+    "settings": "Settings"
   },
   "taskbar": {
     "file": "Plik",
@@ -46,7 +48,7 @@
     "project": "Projekt",
     "project_search": "Wyszukiwanie",
     "resources": "Źródła",
-    "version_control": "Version control",
+    "version_control": "Wersje",
     "layout_settings": "Ustawienia widoku",
     "release_notes": "Informacje",
     "report_issue": "Zgłoś błąd",
@@ -75,8 +77,8 @@
     "timeline": "Oś czasu",
     "plot_development": "Fabuła",
     "characters": "Bohaterowie",
-    "threads": "Threads",
-    "editor": "Editor",
+    "threads": "Wątki",
+    "editors": "Edytory",
     "open_editors": "Otwarte edytory",
     "close_all": "Zamknij wszystkie",
     "save_all": "Zapisz wszystkie"
@@ -213,7 +215,8 @@
       "weight": "Waga",
       "phone_number": "Nr. telefonu",
       "social_number": "Nr. PESEL"
-    }
+    },
+    "new_character": "New character"
   },
   "errors": {
     "errors": "Błędy w tym projekcie",
@@ -249,7 +252,8 @@
     "add": "Dodaj",
     "unset": "Brak",
     "delete": "Usuń",
-    "open": "Otwórz"
+    "open": "Otwórz",
+    "new_thread": "New thread"
   },
   "system_pages": {
     "new_tab": "Nowa karta",
@@ -278,7 +282,7 @@
     "you_are_editing": "Edytujesz: {}",
     "fold_this_part": "Zwiń tę część",
     "expand_this_part": "Rozwiń tę część",
-    "starts_new_part": "Rozpocznyna nową część"
+    "starts_new_part": "Rozpoczyna nową część"
   },
   "resources": {
     "edu": "Edu",
@@ -294,7 +298,7 @@
     "search_hint": "Znajdź definicję słowa (angielski)",
     "search": "Szukaj",
     "source": "Źródło",
-    "license": "License",
+    "license": "Licencja",
     "parts_of_speech": {
       "noun": "rzeczownik",
       "pronoun": "zaimek",
@@ -351,7 +355,7 @@
       "6": "Sobota",
       "7": "Niedziela"
     },
-    "date_format": "{day}.{month}.{year}",
+    "date_format": "{day} {month} {year}",
     "date_format_short": "{day}.{month}.{year}",
     "saved_dates": "Zapisane daty",
     "noting": "Brak elementów",
@@ -395,7 +399,7 @@
     "comma": "przecinek"
   },
   "plot_development": {
-    "toggle_tooltips": "Wł/Wył podpowiedzi"
+    "toggle_tooltips": "Wł/Wył \"W skrócie\""
   },
   "editor": {
     "edit_chapter_data_hint": "Edytuj metadane rozdziału w zakładce \"Oś czasu\".",
@@ -467,6 +471,16 @@
       "change_order": "Zmień kolejność",
       "secondary_sidebar": "Dodatkowy pasek boczny",
       "small_screen_view": "Widok na małe ekrany"
+    },
+    "global": {
+      "back": "Back",
+      "preferences": "Preferences",
+      "preferences_info": "Those settings apply to entire Plotweaver on this device.",
+      "app_language": "App language",
+      "language_values": {
+        "en": "English",
+        "pl": "Polski"
+      }
     }
   },
   "reports": {
@@ -475,6 +489,8 @@
     "download": "Pobierz jako PDF",
     "gathering_data": "Zbieranie danych...",
     "characters": "Bohaterowie",
+    "select_character": "Select character of which report you want to see",
+    "you_can_download": "Charts and more can be downloaded",
     "generated_on": "Wygenerowany"
   },
   "search": {
@@ -495,7 +511,7 @@
   "file_explorer": {
     "open": "Otwórz",
     "hint": "Oto pliki zapisane na Twoim komputerze. Aby ci ułatwić przeglądanie, pokazujemy tylko wspierane formaty: PDF, zdjęcia i filmy. Kliknij dwa razy na folder, aby go otworzyć, kliknij dwa razy na plik, aby wyświetlić go w nowej karcie. Pojedyncze kliknięcie zaznacza.",
-    "macos_unavailable": "Ta funkcja nie jeste dostępna na Twoim urządzeniu (MacOS). Użyj Finder'a, aby znaleźć i otworzyć swój plik."
+    "macos_unavailable": "Ta funkcja nie jeste dostępna na Twoim urządzeniu (MacOS). Użyj Findera, aby znaleźć i otworzyć swój plik."
   },
   "context_menu": {
     "open_in_new_window": "Otwórz w nowym oknie",
@@ -542,14 +558,14 @@
     "search": "Szukaj",
     "error_occurred": "Wybacz, wystąpił błąd podczas szukania artykułu",
     "search_for_article": "Szukaj artykułu",
-    "wikipedia_attribution": "Wikipedia® jak i logo Wikipedia® są zarejestrowanymi znakami towarowymi Wikimedia Foundation, Inc., organizacji non-profit."
+    "wikipedia_attribution": "Nazwa Wikipedia® jak i logo Wikipedia® są zarejestrowanymi znakami towarowymi Wikimedia Foundation, Inc., organizacji non-profit."
   },
   "version_control": {
     "current_project": "Obecny projekt",
     "start_versioning": "Rozpocznij wersjonowanie",
     "introduction_to_versions": "Informacje o wersjonowaniu",
     "branches": "Gałęzie",
-    "versions": "Wersjie",
+    "versions": "Wersje",
     "version": "Wersja",
     "add_message": "Dodaj wiadomość (np.: tytuł)",
     "no_message": "Brak wiadomościu",
@@ -569,13 +585,13 @@
     "checkout_safe": "Można się bezpiecznie przełączyć",
     "checkout_unsafe": "Nie można się bezpiecznie przełączyć",
     "introduction": {
-      "versions": "Versions",
-      "versions_description": "Versions are exprotable files containg all data of the project (characters, threads, chapters etc.). If versions are commited they cannot be modified anymore. There is also uncommited version (always only one) that has all the data that previous version has and all the changes made afterwards.",
-      "branches": "Branches",
+      "versions": "Wersje",
+      "versions_description": "Wersje to pliki zawierające wszystkie dane o projekcie (bohaterowie, wątki, rozdziały itd.), takie jak wyeksportowane pliki. Wersje potwierdzone nie mogą być już edytowane. Jest też niepotwierdzona wersja (zawsze jedna), która posiada wszystkie dane z poprzedniej wersji, jak i zmiany wprowadzone po jej potwierdzeniu tej poprzedniej.",
+      "branches": "Gałęzie",
       "branches_description": "Branches are created automatically when two or more versions share the same parent (previous version). That means that by checkingout between branches you can actually modify two different versions of the same file. To see what commit is a branch and what are initial versions to each, see Version Graph. To create branch, checkout to a commit you're interested in and click \"Add branch\"",
-      "checkingout": "Checkingout",
+      "checkingout": "Przełączanie się",
       "checkingout_description": "Checkingout means changing the version. You can checkout only if current version is commited. To be sure no data is lost, create version and commit it before checkingout. Every change made in Project tab or other will be lost if you checkout to other version from an uncommited or unregistered one.",
-      "sharing": "Sharing",
+      "sharing": "Udostępnianie",
       "sharing_description": "You can easily share version to your friend or coworker. Versions are *.weave files so you can open them anywhere by choosing \"Import version\". The easiest way to get the file is clicking \"Copy path\" on branch tile. "
     },
     "error_occurred": "Wybacz, wystąpił błąd podczas ładowania wersji",
@@ -614,5 +630,22 @@
     "chapters": "Rozdziały",
     "open_in_editor": "Otwórz w edytorze",
     "none": "Brak"
+  },
+  "exporting": {
+    "choose_path": "Select path where you want to export your project",
+    "export": "Export",
+    "exporting": "Exporting",
+    "exported_file_saved": "Exported file saved under: {}",
+    "share": "Share"
+  },
+  "file_types": {
+    "character": "Character",
+    "thread": "Thread",
+    "chapters": "Chapters",
+    "chapter": "Chapter",
+    "project": "Project",
+    "app": "Plotweaver",
+    "user_file": "Your file",
+    "tab": "Tab"
   }
 }

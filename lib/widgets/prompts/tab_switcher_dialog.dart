@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,7 @@ import '../../models/file_tab.dart';
 import '../../providers/project_state.dart';
 
 class TabSwitcherDialog extends StatefulWidget {
+  static const pageName = '/switcher';
   const TabSwitcherDialog({
     super.key,
     this.revert = false,
@@ -38,7 +41,7 @@ class _TabSwitcherDialogState extends State<TabSwitcherDialog> {
 
     final height = tabs.length * 20.0 > 300.0 ? 300.0 : tabs.length * 20.0;
 
-    return KeyboardListener(
+    final dialog = KeyboardListener(
       focusNode: _keyboardFocus,
       onKeyEvent: (value) {
         if (value.logicalKey == LogicalKeyboardKey.controlLeft ||
@@ -123,18 +126,7 @@ class _TabSwitcherDialogState extends State<TabSwitcherDialog> {
           });
         }
 
-        final newOffset = 20.0 * _index;
-        final min = _listScroll.position.minScrollExtent;
-        final max = _listScroll.position.maxScrollExtent;
-        if (newOffset > (height * 0.3)) {
-          if ((newOffset - (height * 0.3)) >= max) {
-            _listScroll.jumpTo(max);
-          } else {
-            _listScroll.jumpTo(newOffset - (height * 0.3));
-          }
-        } else {
-          _listScroll.jumpTo(min);
-        }
+        _adjustScrolling(height);
       },
       child: Focus(
         autofocus: true,
@@ -361,5 +353,59 @@ class _TabSwitcherDialogState extends State<TabSwitcherDialog> {
         ),
       ),
     );
+
+    if (Platform.isMacOS) {
+      return CallbackShortcuts(
+        bindings: {
+          const SingleActivator(
+            LogicalKeyboardKey.tab,
+            control: true,
+          ): () {
+            final newIndex = _index + 1;
+            setState(() {
+              _index = newIndex == tabs.length
+                  ? 0
+                  : newIndex == -1
+                      ? tabs.length - 1
+                      : newIndex;
+            });
+            _adjustScrolling(height);
+          },
+          const SingleActivator(
+            LogicalKeyboardKey.tab,
+            shift: true,
+            control: true,
+          ): () {
+            final newIndex = _index - 1;
+            setState(() {
+              _index = newIndex == tabs.length
+                  ? 0
+                  : newIndex == -1
+                      ? tabs.length - 1
+                      : newIndex;
+            });
+            _adjustScrolling(height);
+          },
+        },
+        child: dialog,
+      );
+    } else {
+      return dialog;
+    }
+  }
+
+  void _adjustScrolling(double height) {
+    final newOffset = 20.0 * _index;
+    final min = _listScroll.position.minScrollExtent;
+    final max = _listScroll.position.maxScrollExtent;
+    if (newOffset > (height * 0.3)) {
+      if ((newOffset - (height * 0.3)) >= max) {
+        _listScroll.jumpTo(max);
+      } else {
+        _listScroll.jumpTo(newOffset - (height * 0.3));
+      }
+    } else {
+      _listScroll.jumpTo(min);
+    }
   }
 }

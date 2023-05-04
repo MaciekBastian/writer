@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../contexts/text_context_menu.dart';
 
-import '../../models/chapters/chapter.dart';
 import '../../providers/project_state.dart';
 
 class ChapterSnippet extends StatelessWidget {

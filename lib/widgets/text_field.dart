@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../contexts/text_context_menu.dart';
+import '../providers/selection.dart';
 import 'models/styled_text_controller.dart';
 
 class WrtTextField extends StatefulWidget {
@@ -49,7 +51,21 @@ class _WrtTextFieldState extends State<WrtTextField> {
   @override
   void initState() {
     super.initState();
+    final selectionManager = Provider.of<SelectionManager>(
+      context,
+      listen: false,
+    );
     _controller = StyledTextController(text: widget.initialValue);
+    _controller.addListener(() {
+      if (_controller.selection.isCollapsed) {
+        selectionManager.clear();
+      } else {
+        selectionManager.updateSelection(
+          _controller.selection,
+          _controller.selection.textInside(_controller.text),
+        );
+      }
+    });
     _focusNode = FocusNode(
       onKeyEvent: (node, event) {
         if (event.logicalKey == LogicalKeyboardKey.controlLeft ||
@@ -67,14 +83,19 @@ class _WrtTextFieldState extends State<WrtTextField> {
         return KeyEventResult.ignored;
       },
     );
-    if (widget.selectAllOnFocus) {
-      _focusNode.addListener(() {
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        selectionManager.initializeController(_controller);
+      } else {
+        selectionManager.removeController();
+      }
+      if (widget.selectAllOnFocus) {
         _controller.selection = TextSelection(
           baseOffset: 0,
           extentOffset: _controller.text.length,
         );
-      });
-    }
+      }
+    });
   }
 
   @override

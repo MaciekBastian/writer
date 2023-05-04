@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/services.dart';
-import 'package:spell_check_on_client/spell_check_on_client.dart';
-import 'package:path_provider/path_provider.dart' as pp;
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart' as pp;
+import 'package:spell_check_on_client/spell_check_on_client.dart';
 
 import '../models/error/spelling_error.dart';
 

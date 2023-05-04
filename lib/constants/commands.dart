@@ -9,7 +9,9 @@ import '../helpers/general_helper.dart';
 import '../models/chapters/chapter.dart';
 import '../models/file_tab.dart';
 import '../models/sidebar_tab.dart';
+import '../pages/resources/how_to_use_writer.dart';
 import '../providers/project_state.dart';
+import '../providers/selection.dart';
 import '../providers/version_control.dart';
 import '../widgets/prompts/command_palette.dart';
 import '../widgets/prompts/new_file.dart';
@@ -26,6 +28,7 @@ enum WrtCommandCategory {
   tools,
   view,
   help,
+  selection,
 }
 
 enum WrtCommand {
@@ -53,11 +56,13 @@ enum WrtCommand {
   fileReload,
   fileExport,
   fileCloseProject,
-  fileExit,
 
   // "edit" commands
   editUndo,
   editRedo,
+  editCopy,
+  editPaste,
+  editCut,
 
   // "View" commands
   switchToProject,
@@ -135,6 +140,7 @@ Map<WrtCommandCategory, String> _categoryNames = {
   WrtCommandCategory.version: 'command_palette.version'.tr(),
   WrtCommandCategory.help: 'taskbar.help'.tr(),
   WrtCommandCategory.view: 'taskbar.view'.tr(),
+  WrtCommandCategory.selection: 'command_palette.selection'.tr(),
 };
 
 String getCommandCategoryName(WrtCommandCategory category) {
@@ -219,6 +225,7 @@ Map<WrtCommand, Command> getShortcutsOnlyCommands() {
     WrtCommand.shortcutGoTo: Command(
       command: WrtCommand.shortcutGoTo,
       callback: (context) {
+        if (ModalRoute.of(context)?.isCurrent != true) return;
         showDialog(
           context: context,
           barrierColor: Colors.transparent,
@@ -241,6 +248,7 @@ Map<WrtCommand, Command> getShortcutsOnlyCommands() {
     WrtCommand.shortcutTabSwitch: Command(
       command: WrtCommand.shortcutTabSwitch,
       callback: (context) async {
+        if (ModalRoute.of(context)?.isCurrent != true) return;
         final provider = Provider.of<ProjectState>(context, listen: false);
         if (provider.isProjectOpened) {
           if (provider.openedTabs.isNotEmpty && !provider.isTabSwitcherOpened) {
@@ -264,6 +272,7 @@ Map<WrtCommand, Command> getShortcutsOnlyCommands() {
     WrtCommand.shortcutTabSwitchReverse: Command(
       command: WrtCommand.shortcutTabSwitchReverse,
       callback: (context) async {
+        if (ModalRoute.of(context)?.isCurrent != true) return;
         final provider = Provider.of<ProjectState>(context, listen: false);
         if (provider.isProjectOpened) {
           if (provider.openedTabs.isNotEmpty && !provider.isTabSwitcherOpened) {
@@ -528,13 +537,13 @@ Map<WrtCommand, Command> getAllCommands() {
       },
       name: '$file: ${'taskbar.reload'.tr()}',
       shortcut: 'f5',
-      keySet: SingleActivator(LogicalKeyboardKey.f5),
+      keySet: const SingleActivator(LogicalKeyboardKey.f5),
     ),
     Command(
       command: WrtCommand.fileExport,
       callback: (context) async {
         final provider = Provider.of<ProjectState>(context, listen: false);
-        // TODO: file export
+        provider.export();
       },
       name: '$file: ${'taskbar.export'.tr()}',
     ),
@@ -547,16 +556,6 @@ Map<WrtCommand, Command> getAllCommands() {
         }
       },
       name: '$file: ${'taskbar.close_project'.tr()}',
-    ),
-    Command(
-      command: WrtCommand.fileExit,
-      callback: (context) async {
-        final provider = Provider.of<ProjectState>(context, listen: false);
-        if (provider.isProjectOpened) {
-          /// TODO: closing app
-        }
-      },
-      name: '$file: ${'taskbar.exit'.tr()}',
     ),
   ];
   final editCommands = <Command>[
@@ -585,9 +584,56 @@ Map<WrtCommand, Command> getAllCommands() {
         }
       },
       name: '$edit: ${'taskbar.redo'.tr()}',
-      shortcut: '$ctrl + Y',
+      shortcut: Platform.isMacOS ? '$ctrl + $shift + Z' : '$ctrl + Y',
+      keySet: Platform.isMacOS
+          ? const SingleActivator(LogicalKeyboardKey.keyZ,
+              shift: true, meta: true)
+          : const SingleActivator(
+              LogicalKeyboardKey.keyY,
+              control: true,
+            ),
+    ),
+    // selection commands
+    Command(
+      command: WrtCommand.editCopy,
+      callback: (context) {
+        final provider = Provider.of<SelectionManager>(context, listen: false);
+        if (!provider.isClear) {
+          provider.copy();
+        }
+      },
+      name: '$edit: ${'taskbar.copy'.tr()}',
+      shortcut: '$ctrl + C',
       keySet: SingleActivator(
-        LogicalKeyboardKey.keyY,
+        LogicalKeyboardKey.keyC,
+        control: Platform.isMacOS ? false : true,
+        meta: Platform.isMacOS,
+      ),
+    ),
+    Command(
+      command: WrtCommand.editPaste,
+      callback: (context) {
+        final provider = Provider.of<SelectionManager>(context, listen: false);
+        provider.paste();
+      },
+      name: '$edit: ${'taskbar.paste'.tr()}',
+      shortcut: '$ctrl + V',
+      keySet: SingleActivator(
+        LogicalKeyboardKey.keyV,
+        control: Platform.isMacOS ? false : true,
+        meta: Platform.isMacOS,
+      ),
+    ),
+    Command(
+      command: WrtCommand.editCut,
+      callback: (context) {
+        final provider = Provider.of<SelectionManager>(context, listen: false);
+        provider.cut();
+      },
+      name: '$edit: ${'taskbar.cut'.tr()}',
+      shortcut: '$ctrl + X',
+      keySet: SingleActivator(
+        LogicalKeyboardKey.keyX,
         control: Platform.isMacOS ? false : true,
         meta: Platform.isMacOS,
       ),
@@ -707,6 +753,7 @@ Map<WrtCommand, Command> getAllCommands() {
     Command(
       command: WrtCommand.viewCommandPalette,
       callback: (BuildContext context) {
+        if (ModalRoute.of(context)?.isCurrent != true) return;
         showDialog(
           context: context,
           barrierColor: Colors.transparent,
@@ -778,7 +825,7 @@ Map<WrtCommand, Command> getAllCommands() {
       callback: (BuildContext context) {
         final provider = Provider.of<ProjectState>(context, listen: false);
         if (provider.isProjectOpened) {
-          provider.addCharacter();
+          provider.addCharacter('character.new_character'.tr());
         }
       },
       name: '$newFile: ${'taskbar.create_character'.tr()}',
@@ -789,7 +836,7 @@ Map<WrtCommand, Command> getAllCommands() {
       callback: (BuildContext context) {
         final provider = Provider.of<ProjectState>(context, listen: false);
         if (provider.isProjectOpened) {
-          provider.addThread();
+          provider.addThread('thread.new_thread'.tr());
         }
       },
       name: '$newFile: ${'taskbar.create_thread'.tr()}',
@@ -848,7 +895,18 @@ Map<WrtCommand, Command> getAllCommands() {
     Command(
       command: WrtCommand.helpAbout,
       callback: (context) {
-        // TODO: about
+        final provider = Provider.of<ProjectState>(context, listen: false);
+        if (provider.isProjectOpened) {
+          provider.openTab(
+            FileTab(
+              id: null,
+              path: HowToUseWriter.pageName,
+              type: FileType.system,
+            ),
+          );
+        } else {
+          // TODO: link to gitbook
+        }
       },
       name: '$help: ${'taskbar.about'.tr()}',
     ),
@@ -900,13 +958,14 @@ Map<WrtCommandCategory, Map<WrtCommand, Command>> getMenuBarCommands() {
       allCommands[WrtCommand.fileCloseSaved],
       allCommands[WrtCommand.fileCloseOthers],
       allCommands[WrtCommand.fileCloseProject],
-      allCommands[WrtCommand.fileExit],
     ].asMap().map((_, val) => MapEntry(val!.command, val)),
 
     /// EDIT
     WrtCommandCategory.edit: [
       allCommands[WrtCommand.editUndo],
       allCommands[WrtCommand.editRedo],
+      allCommands[WrtCommand.editCopy],
+      allCommands[WrtCommand.editPaste],
     ].asMap().map((_, val) => MapEntry(val!.command, val)),
 
     /// TOOLS

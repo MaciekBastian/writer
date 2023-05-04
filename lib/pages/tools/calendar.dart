@@ -10,7 +10,6 @@ import '../../providers/project_state.dart';
 import '../../widgets/expandable_section.dart';
 import '../../widgets/hover_box.dart';
 import '../../widgets/snippets/wikipedia_snippet.dart';
-import '../../widgets/tooltip.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key, this.compact = false});

@@ -4,14 +4,17 @@ import 'dart:isolate';
 
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xml/xml.dart';
 
 import '../models/chapters/chapter.dart';
 import '../models/chapters/chapter_file.dart';
 import '../models/characters/character.dart';
+import '../models/language.dart';
 import '../models/on_this_day.dart';
 import '../models/project.dart';
 import '../models/search_result.dart';
 import '../models/threads/thread.dart';
+import 'file_explorer_helper.dart';
 import 'general_helper.dart';
 
 class ProjectHelper {
@@ -43,10 +46,12 @@ class ProjectHelper {
     return project;
   }
 
-  Future<List<String>> getRecentProjects() async {
+  Future<List<Directory>> getRecentProjects() async {
     final prefs = await SharedPreferences.getInstance();
     final recentProjects = prefs.getStringList('recent_projects') ?? [];
-    return recentProjects;
+    return recentProjects.map((e) {
+      return Directory(e);
+    }).toList();
   }
 
   Future<Project> loadProject(String path) async {
@@ -640,6 +645,129 @@ class ProjectHelper {
       return results;
     }
     return null;
+  }
+
+  /// Loads project from weave file and then creates new project. Currently only
+  /// macos supported. it also handles case if project with the same name already exists
+  // TODO: add windows support
+  Future<Project?> importProject(String file) async {
+    if (!Platform.isMacOS) return null;
+
+    try {
+      final xml = XmlDocument.parse(file);
+      final tree = xml.rootElement;
+      final config = Project(
+        creationDate: DateTime.tryParse(
+              tree.getElement('config')?.getElement('creation-date')?.text ??
+                  '',
+            ) ??
+            DateTime.now(),
+        id: tree.getElement('config')?.getElement('id')?.text ?? '',
+        name: tree.getElement('config')?.getElement('name')?.text ?? '',
+        author: tree.getElement('config')?.getElement('author')?.text ?? '',
+        path: '',
+        language: ProjectLanguage.values.firstWhere(
+          (element) {
+            return element.name ==
+                (tree.getElement('config')?.getElement('language')?.text ??
+                    ProjectLanguage.other.name);
+          },
+        ),
+      );
+      final characters = tree.getElement('characters')?.children.map((p0) {
+            return Character.fromXml(p0.getElement('character')!);
+          }).toList() ??
+          <Character>[];
+      final threads = tree.getElement('threads')?.children.map((p0) {
+            return Thread.fromXml(p0.getElement('thread')!);
+          }).toList() ??
+          <Thread>[];
+      final chapters = tree.getElement('chapters')?.children.map((p0) {
+            return Chapter.fromXml(p0.getElement('chapter')!);
+          }).toList() ??
+          <Chapter>[];
+      final contents = tree
+              .getElement('content')
+              ?.children
+              .map((nest) {
+                final p0 = nest.getElement('chapter-file');
+                final p1 = nest.getElement('chapter-id');
+                return MapEntry(
+                    p1?.innerText ?? '',
+                    (json.decode(p0?.innerText ?? '[]') as List)
+                        .map((e) => e)
+                        .map((e) => e as Map)
+                        .toList());
+              })
+              .toList()
+              .asMap()
+              .map((key, value) => MapEntry(value.key, value.value)) ??
+          {};
+
+      String path = FileExplorerHelper().macosGetProjectPathName(config.name);
+      if (await FileExplorerHelper().macosDoesProjectExists(path)) {
+        path = FileExplorerHelper().macosGetProjectPathName(
+          '${config.name}_import',
+        );
+        if (await FileExplorerHelper().macosDoesProjectExists(path)) {
+          // imported file still exist, adding versions
+          int number = 1;
+          do {
+            path = FileExplorerHelper().macosGetProjectPathName(
+              '${config.name}_import_($number)',
+            );
+            number++;
+          } while (await FileExplorerHelper().macosDoesProjectExists(path));
+        }
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+
+      path = await FileExplorerHelper().macosGetProjectPath(path);
+
+      final directory = Directory(
+        path,
+      );
+      if (!(directory.existsSync())) {
+        await directory.create();
+      }
+      final configFile = File(p.join(directory.path, 'config.mwrt'));
+      await configFile.create();
+      final project = Project(
+        id: config.id,
+        name: config.name,
+        path: path,
+        creationDate: config.creationDate,
+        language: config.language,
+      );
+      await configFile.writeAsString(json.encode(project.toJson()));
+
+      for (var element in characters) {
+        await addCharacter(element, project);
+      }
+      for (var element in threads) {
+        await addThread(element, project);
+      }
+      for (var element in chapters) {
+        await addChapter(element, project);
+      }
+      for (var element in contents.entries) {
+        await openChapterEditor(element.key, project);
+        await updateChapterEditor(element.key, project, element.value);
+      }
+
+      final recentProjects = prefs.getStringList('recent_projects') ?? [];
+      recentProjects.add(path);
+      await prefs.setStringList(
+        'recent_projects',
+        recentProjects.toSet().toList(),
+      );
+
+      return project;
+    } catch (e) {
+      // some error occurred
+      rethrow;
+    }
   }
 }
 

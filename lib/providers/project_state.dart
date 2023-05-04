@@ -1,8 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart' as picker;
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import '../constants/system_pages.dart';
+import '../helpers/file_explorer_helper.dart';
 import '../helpers/search_helper.dart';
+import '../helpers/version_helper.dart';
 import '../models/chapters/chapter.dart';
 import '../models/chapters/chapter_file.dart';
 import '../models/search_result.dart';
@@ -582,6 +586,18 @@ class ProjectState with ChangeNotifier {
     }
   }
 
+  Future<Project?> importProject(String file) async {
+    try {
+      final project = await ProjectHelper().importProject(file);
+      _currentProject = project;
+      notifyListeners();
+      reloadProject();
+      return project;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<Project?> openProject(String path) async {
     try {
       final project = await ProjectHelper().loadProject(path);
@@ -634,15 +650,44 @@ class ProjectState with ChangeNotifier {
     await openProject(_currentProject!.path);
   }
 
-  Future<List<String>> recentProjects() async {
+  Future<Map<String, DateTime>> recentProjects() async {
     var projects = await ProjectHelper().getRecentProjects();
+    projects.removeWhere((element) => !element.existsSync());
     projects = projects
         .getRange(0, projects.length > 5 ? 5 : projects.length)
         .toList();
-    return projects;
+    final data = projects.asMap().map(
+      (key, value) {
+        return MapEntry(value.path, value.statSync().modified);
+      },
+    );
+    return data;
   }
 
-  void openTab(FileTab tab) {
+  void swapTabsOrder(int index, FileTab tab) {
+    final oldIndex = _openedTabs.indexOf(tab);
+    if (oldIndex == index) return;
+    if (oldIndex == -1) {
+      if (tab.type == FileType.characterEditor) {
+        if (tab.id == null) return;
+        openCharacter(tab.id!, index);
+      } else if (tab.type == FileType.threadEditor) {
+        if (tab.id == null) return;
+        openThread(tab.id!, index);
+      } else if (tab.type == FileType.editor) {
+        if (tab.id == null) return;
+        openChapterEditor(tab.id!, index);
+      } else {
+        openTab(tab, index);
+      }
+      return;
+    }
+    _openedTabs.removeAt(oldIndex);
+    _openedTabs.insert(index, tab);
+    notifyListeners();
+  }
+
+  void openTab(FileTab tab, [int? atIndex]) {
     if (_currentProject == null) return;
     final alreadyOpened = _openedTabs.any(
       (element) {
@@ -656,7 +701,11 @@ class ProjectState with ChangeNotifier {
       },
     );
     if (!alreadyOpened) {
-      _openedTabs.add(tab);
+      if (atIndex != null) {
+        _openedTabs.insert(atIndex, tab);
+      } else {
+        _openedTabs.add(tab);
+      }
       _currentlyOpened = _openedTabs.indexOf(tab);
       notifyListeners();
     } else {
@@ -856,7 +905,7 @@ class ProjectState with ChangeNotifier {
           _tabSavingIdentifier = FileType.timelineEditor;
           notifyListeners();
           await Future.delayed(const Duration(milliseconds: 600));
-          saveTimelineFile();
+          await saveTimelineFile();
           break;
         case FileType.threadEditor:
           if (tab.id == null) break;
@@ -969,7 +1018,12 @@ class ProjectState with ChangeNotifier {
         notifyListeners();
         break;
       case FileType.timelineEditor:
-        // TODO: Handle this case.
+        if (_currentProject == null) break;
+        final lastCopy = await ProjectHelper().getAllChapters(
+          _currentProject!,
+        );
+        _chapters = lastCopy;
+        _changedTabs.removeWhere((el) => el.type == FileType.timelineEditor);
         break;
       case FileType.threadEditor:
         if (tab.id == null) break;
@@ -1020,10 +1074,10 @@ class ProjectState with ChangeNotifier {
         }
         break;
       case FileType.plotDevelopment:
-        // TODO: Handle this case.
+        // no edit, view-only file
         break;
       case FileType.system:
-        // TODO: Handle this case.
+        // no edit, view-only file
         break;
       case FileType.editor:
         if (tab.id == null) break;
@@ -1047,10 +1101,10 @@ class ProjectState with ChangeNotifier {
     return _characters.firstWhere((element) => element.id == id);
   }
 
-  void addCharacter() {
+  void addCharacter(String name) {
     final character = Character(
       id: GeneralHelper().id(),
-      name: 'New Character',
+      name: name,
     );
     _characters.add(character);
     _charactersSnippet.addEntries([MapEntry(character.id, character.name)]);
@@ -1096,7 +1150,7 @@ class ProjectState with ChangeNotifier {
     }
   }
 
-  void openCharacter(String id) async {
+  void openCharacter(String id, [int? atIndex]) async {
     if (_currentProject == null) return;
     final isOpened = _characters.any((el) {
       return el.id == id;
@@ -1118,7 +1172,7 @@ class ProjectState with ChangeNotifier {
         type: FileType.characterEditor,
       ),
     );
-    openTab(tab);
+    openTab(tab, atIndex);
     notifyListeners();
   }
 
@@ -1200,10 +1254,10 @@ class ProjectState with ChangeNotifier {
     return _threads.firstWhere((element) => element.id == id);
   }
 
-  void addThread() {
+  void addThread(String name) {
     final thread = Thread(
       id: GeneralHelper().id(),
-      name: 'New Thread',
+      name: name,
     );
     _threads.add(thread);
     _threadsSnippet.addEntries([MapEntry(thread.id, thread.name)]);
@@ -1248,7 +1302,7 @@ class ProjectState with ChangeNotifier {
     }
   }
 
-  void openThread(String id) async {
+  void openThread(String id, [int? atIndex]) async {
     if (_currentProject == null) return;
     final isOpened = _threads.any((el) {
       return el.id == id;
@@ -1270,7 +1324,7 @@ class ProjectState with ChangeNotifier {
         type: FileType.threadEditor,
       ),
     );
-    openTab(tab);
+    openTab(tab, atIndex);
     notifyListeners();
   }
 
@@ -1374,7 +1428,7 @@ class ProjectState with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> openChapterEditor(String id) async {
+  Future<void> openChapterEditor(String id, [int? atIndex]) async {
     if (_currentProject == null) return;
     final isOpened = _editors.any((el) {
       return el.chapterId == id;
@@ -1396,7 +1450,7 @@ class ProjectState with ChangeNotifier {
         type: FileType.editor,
       ),
     );
-    openTab(tab);
+    openTab(tab, atIndex);
     notifyListeners();
   }
 
@@ -1440,7 +1494,8 @@ class ProjectState with ChangeNotifier {
             .where((element) => element.isNotEmpty && element != ' ')
             .length;
       case FileType.general:
-        return _currentProject!.name.split(' ').length;
+        return _currentProject!.name.split(' ').length +
+            (_currentProject!.author ?? '').split(' ').length;
       case FileType.timelineEditor:
         final words = _chapters
             .map((e) {
@@ -1467,7 +1522,7 @@ class ProjectState with ChangeNotifier {
         if (tab.id == null) return null;
         final character = getCharacter(tab.id!);
         final words =
-            '${character.description} ${character.apperance} ${character.age} ${character.goals} ${character.name} ${character.notes.join(' ')}';
+            '${character.description} ${character.apperance} ${character.age} ${character.goals} ${character.name} ${character.notes.join(' ')} ${character.occupationHistory.map((e) => e.occupation).join(' ')} ${character.familyMembers.map((e) => e.name).join(' ')} ${character.friends.map((e) => e.name).join(' ')} ${character.enemies.map((e) => e.name).join(' ')}';
         return words
             .split(' ')
             .where((element) => element.isNotEmpty && element != ' ')
@@ -1607,5 +1662,48 @@ class ProjectState with ChangeNotifier {
     }
 
     return null;
+  }
+
+  // exporting
+  bool _exportingInProgress = false;
+  String? _recentExportPath;
+  bool get isExporting => _exportingInProgress;
+  String? get recentExportPath => _recentExportPath;
+
+  Future<String?> getExportingFile() async {
+    if (_currentProject == null) return null;
+    final exportable = await VersionHelper().getExportableFile(
+      _currentProject!,
+    );
+    return exportable;
+  }
+
+  void export() async {
+    if (_currentProject == null) return;
+    if (_exportingInProgress) return;
+    _exportingInProgress = true;
+    notifyListeners();
+    final exportable = await getExportingFile();
+    if (exportable == null) {
+      _exportingInProgress = false;
+      notifyListeners();
+      return;
+    }
+    final name = FileExplorerHelper().macosGetProjectPathName(
+      _currentProject!.name,
+    );
+    final path = await picker.FilePicker.platform.saveFile(
+      allowedExtensions: ['weave', 'xml'],
+      dialogTitle: 'exporting.choose_path'.tr(),
+      fileName: '$name.weave',
+      lockParentWindow: true,
+      type: picker.FileType.custom,
+    );
+    if (path != null) {
+      await FileExplorerHelper().saveFile(exportable, path);
+      _recentExportPath = path;
+    }
+    _exportingInProgress = false;
+    notifyListeners();
   }
 }

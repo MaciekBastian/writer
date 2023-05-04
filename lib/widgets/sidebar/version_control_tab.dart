@@ -4,9 +4,6 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../button.dart';
-import '../expandable_section.dart';
-import '../prompts/text_prompt.dart';
 
 import '../../helpers/general_helper.dart';
 import '../../models/file_tab.dart';
@@ -14,6 +11,9 @@ import '../../models/version/version.dart';
 import '../../pages/version_control/compare_page.dart';
 import '../../providers/project_state.dart';
 import '../../providers/version_control.dart';
+import '../button.dart';
+import '../expandable_section.dart';
+import '../prompts/text_prompt.dart';
 
 class VersionControlTab extends StatelessWidget {
   const VersionControlTab({super.key});

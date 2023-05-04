@@ -8,6 +8,7 @@ import '../../constants/commands.dart';
 import '../../contexts/text_context_menu.dart';
 
 class CommandPalette extends StatefulWidget {
+  static const pageName = '/command-palette';
   const CommandPalette({super.key, this.initialCommand});
 
   final String? initialCommand;

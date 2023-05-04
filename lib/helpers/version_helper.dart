@@ -291,12 +291,22 @@ class VersionHelper {
             return Chapter.fromXml(p0.getElement('chapter')!);
           }).toList() ??
           <Chapter>[],
-      contents: tree.getElement('content')?.children.map((p0) {
-            return (json.decode(p0.innerText) as List)
-                .map((e) => e.toString())
-                .toList();
-          }).toList() ??
-          <List<String>>[],
+      contents: tree
+              .getElement('content')
+              ?.children
+              .map((nest) {
+                final p0 = nest.getElement('chapter-file');
+                final p1 = nest.getElement('chapter-id');
+                return MapEntry(
+                    p1?.innerText ?? '',
+                    (json.decode(p0?.innerText ?? '[]') as List)
+                        .map((e) => e.toString())
+                        .toList());
+              })
+              .toList()
+              .asMap()
+              .map((key, value) => MapEntry(value.key, value.value)) ??
+          {},
     );
 
     return data;
@@ -324,48 +334,95 @@ class VersionHelper {
       version.toJson(),
     ]);
   }
-}
 
-Future<void> _writeToVersion(List<dynamic> args) async {
-  SendPort responsePort = args[0];
-  String path = args[1];
-  String project = args[2];
-  Version version = Version.fromJson(
-    (args[3] as Map).map((key, value) => MapEntry(key.toString(), value)),
-  );
+  Future<String?> getExportableFile(Project project) async {
+    final port = ReceivePort();
+    await Isolate.spawn(_generateExportable, [
+      port.sendPort,
+      project.path,
+    ]);
+    final response = await port.first as String?;
 
-  final builder = XmlBuilder();
-  builder.declaration(
-    version: '1.0',
-    encoding: 'UTF-8',
-  );
-  final file = File(path);
-  if (!(file.existsSync())) file.create();
+    if (response != null) {
+      return response;
+    }
 
-  final config = File(p.join(project, 'config.mwrt'));
-  final characters = Directory(p.join(project, 'characters'));
-  final threads = Directory(p.join(project, 'threads'));
-  final chapters = Directory(p.join(project, 'chapters'));
-  final content = Directory(p.join(project, 'content'));
-
-  if (!config.existsSync()) {
-    Isolate.exit(responsePort, false);
+    return null;
   }
 
-  final general = Project.fromJson(
-    (json.decode(await config.readAsString()) as Map).map(
-      (key, value) => MapEntry(key.toString(), value),
-    ),
-  );
+  Future<void> _writeToVersion(List<dynamic> args) async {
+    SendPort responsePort = args[0];
+    String path = args[1];
+    String project = args[2];
+    Version version = Version.fromJson(
+      (args[3] as Map).map((key, value) => MapEntry(key.toString(), value)),
+    );
 
-  try {
+    final file = File(path);
+    if (!(file.existsSync())) file.create();
+
+    final config = File(p.join(project, 'config.mwrt'));
+
+    if (!config.existsSync()) {
+      Isolate.exit(responsePort, false);
+    }
+
+    try {
+      final xml = await _getFileContent(project, version);
+      await file.writeAsString(xml);
+    } catch (e) {
+      Isolate.exit(responsePort, false);
+    }
+
+    Isolate.exit(responsePort, true);
+  }
+
+  Future<void> _generateExportable(List<dynamic> args) async {
+    SendPort responsePort = args[0];
+    String project = args[1];
+
+    final config = File(p.join(project, 'config.mwrt'));
+
+    if (!config.existsSync()) {
+      Isolate.exit(responsePort, null);
+    }
+
+    try {
+      final xml = await _getFileContent(project);
+      Isolate.exit(responsePort, xml);
+    } catch (e) {
+      Isolate.exit(responsePort, null);
+    }
+  }
+
+  Future<String> _getFileContent(String project, [Version? version]) async {
+    final builder = XmlBuilder();
+    builder.declaration(
+      version: '1.0',
+      encoding: 'UTF-8',
+    );
+
+    final config = File(p.join(project, 'config.mwrt'));
+    final characters = Directory(p.join(project, 'characters'));
+    final threads = Directory(p.join(project, 'threads'));
+    final chapters = Directory(p.join(project, 'chapters'));
+    final content = Directory(p.join(project, 'content'));
+
+    final general = Project.fromJson(
+      (json.decode(await config.readAsString()) as Map).map(
+        (key, value) => MapEntry(key.toString(), value),
+      ),
+    );
+
     builder.element('version', nest: () {
-      builder.element('code', nest: version.code);
-      builder.element('commited', nest: version.commited.toString());
-      builder.element('previous', nest: version.previous);
-      builder.element('message', nest: version.message);
-      builder.element('path', nest: version.path);
-      builder.element('timestamp', nest: version.timestamp.toIso8601String());
+      if (version != null) {
+        builder.element('code', nest: version.code);
+        builder.element('commited', nest: version.commited.toString());
+        builder.element('previous', nest: version.previous);
+        builder.element('message', nest: version.message);
+        builder.element('path', nest: version.path);
+        builder.element('timestamp', nest: version.timestamp.toIso8601String());
+      }
       builder.element('config', nest: () {
         builder.element('id', nest: general.id);
         builder.element('name', nest: general.name);
@@ -440,8 +497,18 @@ Future<void> _writeToVersion(List<dynamic> args) async {
               .toList();
 
           for (var chapter in files) {
-            builder.element('chapter-file', nest: () {
-              builder.cdata(chapter.readAsStringSync());
+            builder.element('file', nest: () {
+              final path = Uri.parse(chapter.path).pathSegments.lastWhere(
+                    (element) => element.endsWith('.txt'),
+                  );
+              builder.element(
+                'chapter-id',
+                nest: path.substring(0, path.length - '.txt'.length),
+              );
+              builder.element(
+                'chapter-file',
+                nest: chapter.readAsStringSync(),
+              );
             });
           }
         }
@@ -450,10 +517,6 @@ Future<void> _writeToVersion(List<dynamic> args) async {
     });
 
     final xml = builder.buildDocument();
-    await file.writeAsString(xml.toXmlString());
-  } catch (e) {
-    Isolate.exit(responsePort, false);
+    return xml.toString();
   }
-
-  Isolate.exit(responsePort, true);
 }

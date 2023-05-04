@@ -9,6 +9,7 @@ import '../constants/commands.dart';
 import '../helpers/window_helper.dart';
 import '../providers/project_state.dart';
 import 'prompts/command_palette.dart';
+import 'prompts/share_button.dart';
 
 class TaskBar extends StatefulWidget {
   const TaskBar({super.key});
@@ -112,6 +113,8 @@ class _TaskBarState extends State<TaskBar> {
                 builder: (context, value, _) {
                   return Row(
                     children: [
+                      if (value.isProjectOpened) const ShareButton(),
+                      const SizedBox(width: 5.0),
                       if (value.commandPaletteButton)
                         Material(
                           color: Colors.transparent,
