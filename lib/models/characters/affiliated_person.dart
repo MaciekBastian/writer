@@ -1,4 +1,3 @@
-import 'character.dart';
 
 enum SideChange {
   fromEnemy,

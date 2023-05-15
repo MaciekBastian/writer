@@ -70,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
           canRequestFocus: true,
           descendantsAreFocusable: true,
           focusNode: _primaryFocus,
-          child: Column(
+          child: const Column(
             children: [
               // general task bar with actions and platform buttons
-              const TaskBar(),
+              TaskBar(),
               // app
               Expanded(
                 child: Row(
-                  children: const [
+                  children: [
                     // sidebar
                     Sidebar(),
                     // workspace
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               // status bar
-              const Statusbar(),
+              Statusbar(),
             ],
           ),
         ),

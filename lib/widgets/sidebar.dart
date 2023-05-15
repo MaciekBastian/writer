@@ -190,7 +190,7 @@ class _SidebarState extends State<Sidebar> {
                 ),
                 // TODO: MACOS SPECIFIC
                 if (Platform.isMacOS)
-                  Column(
+                  const Column(
                     children: [],
                   ),
                 const SizedBox(height: 10.0),

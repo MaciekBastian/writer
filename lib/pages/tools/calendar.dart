@@ -437,7 +437,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 'calendar.sources'.tr(),
                                 style: theme.textTheme.bodySmall,
                               ),
-                              content: Column(
+                              content: const Column(
                                 children: [
                                   // TODO: open wikipedia articles
                                 ],

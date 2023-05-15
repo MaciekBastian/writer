@@ -19,7 +19,7 @@ class FileExplorerPage extends StatefulWidget {
 class _FileExplorerPageState extends State<FileExplorerPage> {
   bool _loading = true;
   int _index = 0;
-  List<Directory> _history = [];
+  final List<Directory> _history = [];
   FileSystemEntity? _selected;
 
   @override

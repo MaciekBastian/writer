@@ -42,7 +42,7 @@ class _EditorPageState extends State<EditorPage> {
                   child: ListView(
                     controller: _toolbarScroll,
                     scrollDirection: Axis.horizontal,
-                    children: [
+                    children: const [
                       // TODO: this toolbar
                     ],
                   ),
@@ -159,7 +159,7 @@ class _EditorPageState extends State<EditorPage> {
                         child: Container(
                           color: const Color(0xFF242424),
                           child: ListView(
-                            children: [],
+                            children: const [],
                           ),
                         ),
                       ),

@@ -53,8 +53,8 @@ class LicensesPage extends StatelessWidget {
           },
         ),
         const SizedBox(height: 5.0),
-        Row(
-          children: const [
+        const Row(
+          children: [
             FlutterLogo(
               size: 40.0,
               style: FlutterLogoStyle.markOnly,

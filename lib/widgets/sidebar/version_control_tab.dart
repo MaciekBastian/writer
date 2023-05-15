@@ -231,7 +231,7 @@ class VersionControlTab extends StatelessWidget {
                     )
                   else
                     // versioning is enabled but there is no current version
-                    Column(
+                    const Column(
                       children: [],
                     )
                 else

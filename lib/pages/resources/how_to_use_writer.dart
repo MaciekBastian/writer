@@ -7,7 +7,7 @@ class HowToUseWriter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// TODO: implement how to guide
-    return Row(
+    return const Row(
       children: [
         Expanded(
           flex: 3,

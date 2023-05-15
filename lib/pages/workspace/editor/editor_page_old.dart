@@ -244,7 +244,7 @@ class _EditorPageState extends State<EditorPage> {
               const SizedBox(height: 10.0),
               Expanded(
                 child: ListView(
-                  children: [
+                  children: const [
                     // TODO: add chapter outline
                   ],
                 ),

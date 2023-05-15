@@ -314,7 +314,7 @@ class _PlotDevelopmentTileState extends State<_PlotDevelopmentTile> {
                         child: widget.tooltips
                             ? HoverBox(
                                 content: ListView(
-                                  children: [],
+                                  children: const [],
                                 ),
                                 child: Container(),
                               )

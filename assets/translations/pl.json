@@ -30,7 +30,7 @@
     "open_recent": "Otwórz ostatni...",
     "export": "Eksportuj",
     "close": "Zamknij",
-    "reload": "Odświerz",
+    "reload": "Odśwież",
     "close_all": "Zamknij wszystkie",
     "exit": "Wyjdź",
     "close_project": "Zamknij projekt",
@@ -94,7 +94,7 @@
     },
     "unset": "Brak",
     "info": "Informacje",
-    "how_project_works": "Ten projekt jest tylko na tym komputerze. Jeśli chcesz udostępnić go innej osobie, użyj \"Eksportuj\" w zakładce \"Plik\" na pasku narzędzi. Zmiana katalogu w eksploratorze plików może uszkodzić ten projekt, więc jeśli chcesz przenieść cały projekt w inne miejsce, najpierw wyeksportuj go, a następnie otwórz plik *.wrte funkcją \"Otwórz\" i wybierz nowy katalog.",
+    "how_project_works": "Ten projekt jest tylko na tym komputerze. Jeśli chcesz udostępnić go innej osobie, użyj \"Eksportuj\" w zakładce \"Plik\" na pasku narzędzi. Zmiana katalogu w eksploratorze plików może uszkodzić ten projekt, więc jeśli chcesz przenieść cały projekt w inne miejsce, najpierw wyeksportuj go, a następnie otwórz plik *.weave funkcją \"Otwórz\" i wybierz nowy katalog.",
     "current_path": "Obecnie, projekt jest zapisany na tej ścieżce (nie modyfikuj plików w tym folderze): "
   },
   "close_dialog": {
@@ -479,7 +479,8 @@
       "app_language": "App language",
       "language_values": {
         "en": "English",
-        "pl": "Polski"
+        "pl": "Polski",
+        "de": "Deutche (Computerübersetzung)"
       }
     }
   },

@@ -373,7 +373,7 @@ class _CompareVersionsPageState extends State<CompareVersionsPage> {
     );
   }
 
-  String _getModificationStatus(FileType type, [String? id]) {
+  String _getModificationStatus(FileType type) {
     // TODO: this
     return '';
   }

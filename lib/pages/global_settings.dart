@@ -87,7 +87,10 @@ class _GlobalSettingsPageState extends State<GlobalSettingsPage> {
                               ? 'preferences.global.language_values.pl'.tr()
                               : value.languageCode.contains('en')
                                   ? 'preferences.global.language_values.en'.tr()
-                                  : '',
+                                  : value.languageCode.contains('de')
+                                      ? 'preferences.global.language_values.de'
+                                          .tr()
+                                      : '',
                         );
                       },
                     ),
